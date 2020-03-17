@@ -15,3 +15,5 @@ Route::get('/boutique', 'ProductController@index')->name('products.index');
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/panier/ajouter','CartController@store')->name('cart.store');
