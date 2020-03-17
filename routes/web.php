@@ -10,7 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/boutique/{slug}','ProductController@show')->name('products.show');
+Route::get('/boutique', 'ProductController@index')->name('products.index');
 Route::get('/', function () {
-    return view('products.index');
+    return view('welcome');
 });
