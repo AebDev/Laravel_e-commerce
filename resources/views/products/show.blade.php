@@ -12,9 +12,8 @@
     <form action="{{route('cart.store')}}" method="post">
       @csrf
 
-    <input type="text" hidden name="id" value="{{$product->id}}">
-        <input type="text" hidden name="title" value="{{$product->title}}">
-        <input type="text" hidden name="price" value="{{$product->price}}">
+    <input type="text" hidden name="product_id" value="{{$product->id}}">
+        
         <button type="submit" class="btn btn-dark">ajouer au panier</button>
       </form>
     </div>
