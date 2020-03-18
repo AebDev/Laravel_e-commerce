@@ -1,5 +1,9 @@
 @extends('layouts.master')
 
+@section('meta')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
+
 @section('checkout-script')
 <script src="https://js.stripe.com/v3/"></script>
 @endsection
@@ -9,15 +13,16 @@
         <h1>Page de paiment</h1>
         <div class="row">
             <div class="col-md-6">
-                <form id="payment-form">
-                    <div id="card-element" class="my-4">
+            <form class="my-4" action="{{route('checkout.store')}}" method="POST" id="payment-form">
+                @csrf
+                    <div id="card-element" >
                       <!-- Elements will create input elements here -->
                     </div>
                   
                     <!-- We'll put the error messages in this element -->
                     <div id="card-errors" role="alert"></div>
                   
-                    <button class="btn btn-success mt-4" id="submit">passer la commande</button>
+                <button class="btn btn-success mt-4" id="submit">passer la commande {{getPrice(Cart::total())}}</button>
                   </form>
             </div>
         </div>
@@ -61,27 +66,51 @@ card.addEventListener('change', ({error}) => {
 });
 
 var form = document.getElementById('payment-form');
-
+var submitbutton = document.getElementById('submit');
 form.addEventListener('submit', function(ev) {
   ev.preventDefault();
+  submitbutton.disable = true;
   stripe.confirmCardPayment("{{ $clientSecret }}", {
     payment_method: {
       card: card
     }
   }).then(function(result) {
     if (result.error) {
+        submitbutton.disable = false;
       // Show error to your customer (e.g., insufficient funds)
       console.log(result.error.message);
     } else {
       // The payment has been processed!
       if (result.paymentIntent.status === 'succeeded') {
-        // Show a success message to your customer
-        // There's a risk of the customer closing the window before callback
-        // execution. Set up a webhook or plugin to listen for the
-        // payment_intent.succeeded event that handles any business critical
-        // post-payment actions.
-        console.log(result.paymentIntent);
-      }
+        
+        var paymentIntent = result.paymentIntent;
+        var token =  document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        var url = form.action;
+        var redirect = '/merci';
+
+        fetch(
+            url,
+            {
+                headers:{
+                    "content-type": "application/json",
+                    "Accept": "application/json, text-plain, */*",
+                    "x-Requested-with": "XMLHttpRequest",
+                    "X-CSRF-TOKEN": token
+                },
+
+                method: 'Post',
+
+                body:JSON.stringify({
+                    paymentIntent: paymentIntent
+                })
+            }
+            ).then((data)=>{
+            console.log(data)
+            window.location.href = redirect;
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }
     }
   });
 });
