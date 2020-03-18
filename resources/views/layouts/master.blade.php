@@ -151,6 +151,9 @@ h1, h2, h3, h4, h5, h6 {
     <!-- Custom styles for this template -->
     <link href="blog.css" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    @yield('checkout-script')
+
   </head>
   <body>
 
@@ -218,5 +221,8 @@ h1, h2, h3, h4, h5, h6 {
     <a href="#">Back to top</a>
   </p>
 </footer>
+
+@yield('script-js')
+
 </body>
 </html>
