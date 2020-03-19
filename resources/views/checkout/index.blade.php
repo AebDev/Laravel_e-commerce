@@ -69,14 +69,14 @@ var form = document.getElementById('payment-form');
 var submitbutton = document.getElementById('submit');
 form.addEventListener('submit', function(ev) {
   ev.preventDefault();
-  submitbutton.disable = true;
+  submitbutton.disabled = true;
   stripe.confirmCardPayment("{{ $clientSecret }}", {
     payment_method: {
       card: card
     }
   }).then(function(result) {
     if (result.error) {
-        submitbutton.disable = false;
+        submitbutton.disabled = false;
       // Show error to your customer (e.g., insufficient funds)
       console.log(result.error.message);
     } else {
@@ -91,27 +91,25 @@ form.addEventListener('submit', function(ev) {
         fetch(
             url,
             {
-                headers:{
-                    "content-type": "application/json",
-                    "Accept": "application/json, text-plain, */*",
-                    "x-Requested-with": "XMLHttpRequest",
-                    "X-CSRF-TOKEN": token
-                },
+              headers: {
+                      "Content-Type": "application/json",
+                      "Accept": "application/json, text-plain, */*",
+                      "X-Requested-With": "XMLHttpRequest",
+                      "X-CSRF-TOKEN": token
+                  },
 
                 method: 'Post',
 
                 body:JSON.stringify({
                     paymentIntent: paymentIntent
                 })
-            }
-            ).then((data)=>{
+            }).then((data)=>{
             console.log(data)
             window.location.href = redirect;
-        }).catch((error)=>{
+            }).catch((error)=>{
             console.log(error)
-        })
-    }
-    }
+            })
+          }}
   });
 });
     </script>

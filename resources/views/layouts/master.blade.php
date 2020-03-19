@@ -17,7 +17,7 @@
 <link rel="apple-touch-icon" href="/docs/4.4/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
 <link rel="icon" href="/docs/4.4/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="/docs/4.4/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-<link rel="manifest" href="/docs/4.4/assets/img/favicons/manifest.json">
+
 <link rel="mask-icon" href="/docs/4.4/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
 <link rel="icon" href="/docs/4.4/assets/img/favicons/favicon.ico">
 <meta name="msapplication-config" content="/docs/4.4/assets/img/favicons/browserconfig.xml">
@@ -150,7 +150,7 @@ h1, h2, h3, h4, h5, h6 {
     <!-- Custom styles for this template -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="blog.css" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     @yield('checkout-script')
@@ -195,6 +195,12 @@ h1, h2, h3, h4, h5, h6 {
 @if (session('success'))
     <div class="alert alert-success">
       {{session('success')}}
+    </div>
+@endif
+
+@if (session('danger'))
+    <div class="alert alert-danger">
+      {{session('danger')}}
     </div>
 @endif
   {{-- <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">

@@ -20,15 +20,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
 Route::get('/panier','CartController@index')->name('cart.index');
-
 Route::post('/panier/ajouter','CartController@store')->name('cart.store');
+Route::put('/panier/{rowId}','CartController@update')->name('cart.update');
+Route::delete('/panier/{rowId}','CartController@destroy')->name('cart.destroy');
 
-Route::delete('/panier/{rowid}','CartController@destroy')->name('cart.destroy');
 
-Route::get('/videpanier',function(){
-    \Cart::destroy();
-});
+
 
 Route::get('/paiement','CheckoutController@index')->name('checkout.index');
 Route::post('/paiement','CheckoutController@store')->name('checkout.store');

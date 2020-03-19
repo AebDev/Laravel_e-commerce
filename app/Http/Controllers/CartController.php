@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Product;
-use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -82,9 +84,23 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $rowId)
     {
-        //
+        $data = $request->json()->all();
+        
+        $Validator = Validator::make($request->all(),[
+            'qty' => 'required|numeric|between:1,6'
+            ]);
+        
+        if ($Validator->fails()) {
+            Session::flash('danger', 'La quantité du produit ne doit pas passée à ' . $data['qty'] . '.');
+            return response()->json(['error' => 'Cart Quantity Has Not Been Updated']);
+        }
+        Cart::update($rowId, $data['qty']);
+
+        Session::flash('success', 'La quantité du produit est passée à ' . $data['qty'] . '.');
+        return response()->json(['success' => 'Cart Quantity Has Been Updated']);
+        
     }
 
     /**
@@ -93,9 +109,9 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($rowid)
+    public function destroy($rowId)
     {
-        Cart::remove($rowid);
+        Cart::remove($rowId);
         return back()->with('success','le produite a ete supprimer.');
     }
 }
