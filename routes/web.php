@@ -24,7 +24,7 @@ Route::get('/', function () {
 
 Route::get('/panier','CartController@index')->name('cart.index');
 Route::post('/panier/ajouter','CartController@store')->name('cart.store');
-Route::put('/panier/{rowId}','CartController@update')->name('cart.update');
+Route::patch('/panier/{rowId}','CartController@update')->name('cart.update');
 Route::delete('/panier/{rowId}','CartController@destroy')->name('cart.destroy');
 
 

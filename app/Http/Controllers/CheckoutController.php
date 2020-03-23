@@ -64,7 +64,6 @@ class CheckoutController extends Controller
         $order->payment_created_at = (new DateTime())
         ->setTimestamp($data['paymentIntent']['created'])
         ->format('Y-m-d H:i:s');
-
         $products = [];
         $i=0;
 

@@ -129,7 +129,7 @@
           var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
           fetch(
-            `/panier/${rowId}`,
+            '/panier/'+rowId,
               {
                   headers: {
                       "Content-Type": "application/json",
@@ -137,7 +137,7 @@
                       "X-Requested-With": "XMLHttpRequest",
                       "X-CSRF-TOKEN": token
                   },
-                  method: 'put',
+                  method: 'PATCH',
                  
                   body: JSON.stringify({
                       qty: this.value
