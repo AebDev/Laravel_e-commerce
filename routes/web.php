@@ -19,7 +19,7 @@ Route::get('/boutique', 'ProductController@index')->name('products.index');
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/search', 'ProductController@search')->name('products.search');
 
 
 Route::get('/panier','CartController@index')->name('cart.index');
@@ -33,3 +33,7 @@ Route::delete('/panier/{rowId}','CartController@destroy')->name('cart.destroy');
 Route::get('/paiement','CheckoutController@index')->name('checkout.index');
 Route::post('/paiement','CheckoutController@store')->name('checkout.store');
 Route::get('/merci','CheckoutController@thankyou')->name('checkout.thankyou');
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});

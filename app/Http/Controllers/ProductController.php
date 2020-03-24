@@ -14,10 +14,10 @@ class ProductController extends Controller
             $products = Product::with('categories')->whereHas('categories',function ($query)
             {
                 $query->where('slug',request('slug'));
-            })->paginate(6);
+            })->orderBy('created_at','DESC')->paginate(6);
         }else{
 
-           $products = Product::with('categories')->paginate(6);
+           $products = Product::with('categories')->orderBy('created_at','DESC')->paginate(6);
             // $products =  Product::inRandomOrder()->take(6)->get();
         }
         
@@ -29,5 +29,21 @@ class ProductController extends Controller
 
         $product = Product::where('slug',$slug)->firstorfail();
         return view('products.show')->with('product',$product);
+    }
+
+    public function search()
+    {
+        request()->validate([
+            'q' => 'required|min:3'
+        ]);
+        // if ($Validator->fails()) {
+        //     Session::flash('danger', 'Il faut au min 3 charactere.');
+        // }
+        $req = request('q');
+        $products  = Product::where('title','like',"%$req%")
+        ->orwhere('description','like',"%$req%")
+        ->orderBy('created_at','DESC')
+        ->paginate(6);
+        return view('products.search',compact('products'));
     }
 }

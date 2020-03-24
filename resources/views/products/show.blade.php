@@ -7,7 +7,7 @@
       <strong class="d-inline-block mb-2 text-primary">Categorie</strong>
       <h4 class="mb-0">{{$product->title}}</h4>
     <div class="mb-1 text-muted">{{$product->created_at->format('d/m/y')}}</div>
-      <p class="card-text mb-auto">{{$product->description}}</p>
+      <p class="card-text mb-auto">{!! $product->description !!}</p>
       <strong class="card-text mb-auto">{{$product->getPrice()}}</strong>
     <form action="{{route('cart.store')}}" method="post">
       @csrf
@@ -18,7 +18,7 @@
       </form>
     </div>
     <div class="col-auto d-none d-lg-block">
-    <img src="{{$product->image}}" alt="">
+      <img src="/storage/{{$product->image}}" height="250" width="200" alt="">
     </div>
   </div>
 </div>
