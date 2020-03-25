@@ -36,9 +36,7 @@ class ProductController extends Controller
         request()->validate([
             'q' => 'required|min:3'
         ]);
-        // if ($Validator->fails()) {
-        //     Session::flash('danger', 'Il faut au min 3 charactere.');
-        // }
+       
         $req = request('q');
         $products  = Product::where('title','like',"%$req%")
         ->orwhere('description','like',"%$req%")

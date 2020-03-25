@@ -19,7 +19,7 @@ class CheckoutController extends Controller
      */
     public function index()
     {
-
+        
         if (Cart::count() == 0) {
             return redirect()->route('products.index');
         }
@@ -68,13 +68,14 @@ class CheckoutController extends Controller
         $i=0;
 
         foreach (Cart::content() as $product) {
-            $products['product_'.$i][] = $product->model->title;
-            $products['product_'.$i][] = $product->model->price;
-            $products['product_'.$i][] = $product->model->qty;
+            
+            $products['product_'.$i][] = $product->name;
+            $products['product_'.$i][] = $product->price;
+            $products['product_'.$i][] = $product->qty;
             $i++;
         }
         $order->products = serialize($products);
-        $order->user_id = 15;
+        $order->user_id = auth()->user()->id;
 
         $order->save();
         

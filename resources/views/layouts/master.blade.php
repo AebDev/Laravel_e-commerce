@@ -169,7 +169,41 @@ h1, h2, h3, h4, h5, h6 {
       </div>
       <div class="col-4 d-flex justify-content-end align-items-center">
         @include('partials.search')
-        <a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
+        @if (Route::has('login'))
+                <div class="top-right links">
+                  <ul class="navbar-nav ml-auto">
+                    @auth
+                    
+                      <li class="nav-item dropdown">
+                          <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                              {{ Auth::user()->name }} <span class="caret"></span>
+                          </a>
+
+                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('home') }}">
+                              Mes Commandes
+                          </a>
+                              <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                              document.getElementById('logout-form').submit();">
+                                  {{ __('Logout') }}
+                              </a>
+
+                              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                  @csrf
+                              </form>
+                              
+                          </div>
+                          
+                      </li>
+                      
+                  
+                    @else
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('login') }}">Sign in</a>
+                    @endauth
+                </div>
+            @endif
+          </ul>
       </div>
     </div>
   </header>
@@ -235,6 +269,8 @@ h1, h2, h3, h4, h5, h6 {
 </footer>
 
 @yield('script-js')
-
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>
