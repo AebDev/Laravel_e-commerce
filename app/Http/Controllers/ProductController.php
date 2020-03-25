@@ -28,7 +28,8 @@ class ProductController extends Controller
     public function show($slug){
 
         $product = Product::where('slug',$slug)->firstorfail();
-        return view('products.show')->with('product',$product);
+        $stock = $product->stock === 0 ? 'Indisponible' : 'Disponible';
+        return view('products.show',compact('product','stock'));
     }
 
     public function search()
@@ -36,7 +37,7 @@ class ProductController extends Controller
         request()->validate([
             'q' => 'required|min:3'
         ]);
-       
+    
         $req = request('q');
         $products  = Product::where('title','like',"%$req%")
         ->orwhere('description','like',"%$req%")

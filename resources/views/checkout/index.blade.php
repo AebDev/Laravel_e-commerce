@@ -104,10 +104,16 @@ form.addEventListener('submit', function(ev) {
                     paymentIntent: paymentIntent
                 })
             }).then((data)=>{
-            console.log(data)
+              if(data.status === 400){
+                var redirect = '/boutique';
+              }
+              else{
+                var redirect = '/merci';
+              }
+            
             window.location.href = redirect;
             }).catch((error)=>{
-            console.log(error)
+            
             })
           }}
   });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Product;
 use DateTime;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -53,7 +54,11 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
-        
+        if ($this->checkIsAvailable()) {
+            cart::destroy();
+            Session::flash('danger','le stock du produit(s) sélectionné est épuisé.');
+            return response()->json(['success' => false],400);
+        }
         
         $data = $request->json()->all();
         
@@ -80,6 +85,7 @@ class CheckoutController extends Controller
         $order->save();
         
         if($data['paymentIntent']['status'] === 'succeeded'){
+            $this->updatestock();
             cart::destroy();
             Session::flash('success','votre commande a ete traite avec succes');
             return response()->json(['success' => 'Payment Intent succeeded']);
@@ -138,6 +144,26 @@ class CheckoutController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function checkIsAvailable()
+    {
+        foreach (Cart::content() as $item) {
+            $product = Product::find($item->model->id);
+            if($item->qty > $product->stock){
+                return true;
+            }
+            
+        }
+        return false;
+    }
+
+    public function updatestock()
+    {
+        foreach (Cart::content() as $item) {
+            $product = Product::find($item->model->id);
+            $product->update(['stock' => $product->stock - $item->qty]);
+        }
     }
 
 }
