@@ -18,8 +18,25 @@
       </form>
     </div>
     <div class="col-auto d-none d-lg-block">
-      <img src="/storage/{{$product->image}}" height="250" width="200" alt="">
+      <img src="/storage/{{$product->image}}" height="250" width="200" id="main-image" alt="">
+      <div class="mt-2">
+        @if ($product->images)
+        <img src="/storage/{{$product->image}}" width="50" style="cursor: pointer" class="img-thumbnail" alt="">
+        @foreach (json_decode($product->images) as $image)
+        <img src="/storage/{{$image}}"  width="50" style="cursor: pointer" class="img-thumbnail" alt="">
+        @endforeach
+        @endif
+      </div>
     </div>
   </div>
 </div>
+<script>
+  var mainimage = document.querySelector('#main-image');
+  var thumbnails = document.querySelectorAll('.img-thumbnail');
+
+  thumbnails.forEach(element => element.addEventListener('click',changeimage));
+  function changeimage(e) {
+    mainimage.src = this.src;
+  }
+</script>
 @endsection
