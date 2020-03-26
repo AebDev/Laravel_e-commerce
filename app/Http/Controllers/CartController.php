@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Coupon;
 use App\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -118,4 +119,32 @@ class CartController extends Controller
         Cart::remove($rowId);
         return back()->with('success','le produite a ete supprimer.');
     }
+
+    public function storeCoupon()
+    {
+        request()->validate([
+            'code' => 'required|min:1'
+        ]);
+    
+        $coupon = Coupon::where('code','like',request('code'))->first();
+        if(!$coupon){
+            return redirect()->back()->with('danger','coupon est invalide');
+        }
+        else{
+            session()->put('coupon',[
+                'code' => $coupon->code,
+                'remise' => $coupon->discount(Cart::subTotal())
+            ]);
+            return redirect()->back()->with('success','le coupon est applique');
+
+            
+        }
+    }
+   
+
+    public function destroyCoupon()
+    {
+        session()->forget('coupon');
+        return redirect()->back()->with('success','le coupon est retirer');
+    }  
 }

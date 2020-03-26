@@ -22,7 +22,7 @@
                     <!-- We'll put the error messages in this element -->
                     <div id="card-errors" role="alert"></div>
                   
-                <button class="btn btn-success mt-4" id="submit">passer la commande {{getPrice(Cart::total())}}</button>
+                <button class="btn btn-success mt-4" id="submit">passer la commande {{getPrice($total)}}</button>
                   </form>
             </div>
         </div>

@@ -25,15 +25,20 @@ class CheckoutController extends Controller
             return redirect()->route('products.index');
         }
         Stripe::setApiKey('sk_test_yg9luttAaHg4ezQE1SelIoXK00rzp7Cxwi');
+        $total = Cart::Total();
+
+        if(session('coupon')){
+            $total = ((Cart::subTotal() - session('coupon')['remise'])+((Cart::subTotal() - session('coupon')['remise'])*config('cart.tax')/100));
+        }
 
         $intent = PaymentIntent::create([
-            'amount' => round(Cart::Total()),
+            'amount' => round($total),
             'currency' => 'eur',
         ]);
 
         $clientSecret = Arr::get($intent,'client_secret');
 
-        return view('checkout.index')->with('clientSecret',$clientSecret);
+        return view('checkout.index',compact('clientSecret','total'));
     }
 
     /**
@@ -86,6 +91,9 @@ class CheckoutController extends Controller
         
         if($data['paymentIntent']['status'] === 'succeeded'){
             $this->updatestock();
+            if(session('coupon')){
+                session()->forget('coupon');
+            }
             cart::destroy();
             Session::flash('success','votre commande a ete traite avec succes');
             return response()->json(['success' => 'Payment Intent succeeded']);
